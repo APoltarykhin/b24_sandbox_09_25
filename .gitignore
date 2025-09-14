@@ -1,0 +1,7 @@
+# Исключаем ВСЕ кроме папки local/ и еще парочки нужных
+/*
+!/local/
+!.gitignore
+!composer.json
+!README.md
+!version.php
