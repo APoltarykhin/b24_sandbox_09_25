@@ -1,0 +1,1 @@
+<?require_once($_SERVER["DOCUMENT_ROOT"]."/local/modules/homeart.integration/admin/my_item_integration.php");?>
