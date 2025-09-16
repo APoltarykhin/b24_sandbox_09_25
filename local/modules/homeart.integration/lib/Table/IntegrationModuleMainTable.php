@@ -1,6 +1,6 @@
 <?php
 
-namespace PochtaTech\CustomAdminStatistic\Table;
+namespace Homeart\Integration\Table;
 
 use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\ORM\Fields\DatetimeField;
