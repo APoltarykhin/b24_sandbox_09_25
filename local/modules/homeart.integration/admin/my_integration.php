@@ -29,16 +29,6 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_a
     <a id="settingsButton" href="<?=htmlspecialcharsbx('/bitrix/admin/my_item_integration.php'); ?>" class="btn btn-primary" role="button"><?=Loc::getMessage('SETTINGS_WEBHOOKS'); ?></a>
 </div>
 
-<!-- Обработка клика через JQuery -->
-<script type="text/javascript">
-BX.ready(function(){
-    $('#settingsButton').on('click', function(e){
-        e.preventDefault();
-        var link = $(this).attr('href');
-        top.BX.adminSidePanelHelper.open(link); // Открытие страницы в боковой панели админки
-    });
-});
-</script>
 
 <!-- Основной контент заканчивается тут -->
 
