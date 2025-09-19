@@ -11,6 +11,10 @@ use Bitrix\Main\Page\Asset;
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 
+if (!Loader::includeModule('homeart.integration')) {
+    throw new SystemException('Module homeart.integration is not installed');
+}
+
 Loc::loadMessages(__FILE__);
 Extension::load(['ui.progressbar', 'ui.forms', 'ui.entity-selector', 'ui.buttons', 'ui.datetime', 'ui.notification']);
 
@@ -25,9 +29,7 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_a
 
 <!-- Начало основного блока -->
 
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-    <a id="settingsButton" href="<?=htmlspecialcharsbx('/bitrix/admin/my_item_integration.php'); ?>" class="btn btn-primary" role="button"><?=Loc::getMessage('SETTINGS_WEBHOOKS'); ?></a>
-</div>
+<p>AAAAAAAA</p>
 
 
 <!-- Основной контент заканчивается тут -->
