@@ -21,8 +21,11 @@ Extension::load(['ui.progressbar', 'ui.forms', 'ui.entity-selector', 'ui.buttons
 // Получаем текущий запрос
 $request = Context::getCurrent()->getRequest();
 
+// Создаем объект Asset
+$asset = Asset::getInstance();
+
 $APPLICATION->ShowHead();
-$APPLICATION->SetTitle(Loc::getMessage("PT_CUSTOM_ADMIN_STAT_TASKS_TITLE"));
+$APPLICATION->SetTitle(Loc::getMessage("HOMEART_INTRGRATION_ADMIN_MAIN_TITLE"));
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 ?>
@@ -31,7 +34,7 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_a
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Карточка в левом верхнем углу -->
+        <!-- Карточка подменю веб-хуки -->
         <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
             <div class="card h-100">
                 <div class="card-body">
@@ -53,10 +56,10 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_a
     </div>
 </div>
 
-
 <!-- Основной контент заканчивается тут -->
 
-
 <?php
+
+$asset->addCss("/local/modules/homeart.integration/css/style.css");
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 ?>
