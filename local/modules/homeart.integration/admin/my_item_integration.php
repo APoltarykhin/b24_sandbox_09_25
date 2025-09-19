@@ -11,8 +11,8 @@ use Bitrix\Main\Page\Asset;
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 
-if (!Loader::includeModule('pochtatech.customadminstatistic')) {
-    throw new SystemException('Module pochtatech.customadminstatistic is not installed');
+if (!Loader::includeModule('homeart.integration')) {
+    throw new SystemException('Module homeart.integration is not installed');
 }
 
 Loc::loadMessages(__FILE__);
@@ -27,14 +27,14 @@ $APPLICATION->SetTitle(Loc::getMessage("PT_CUSTOM_ADMIN_STAT_TASKS_TITLE"));
 // ПОДКЛЮЧЕНИЕ ПРОЛОГА
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
-if (!Loader::includeModule('pochtatech.customadminstatistic')) {
-    throw new \Bitrix\Main\SystemException('Module pochtatech.customadminstatistic is not installed');
+if (!Loader::includeModule('homeart.integration')) {
+    throw new \Bitrix\Main\SystemException('Module homeart.integration is not installed');
 }
 
 Loc::loadMessages(__FILE__);
 Extension::load(['ui.forms', 'ui.buttons', 'ui.notification']);
 
-$module_id = 'pochtatech.customadminstatistic';
+$module_id = 'homeart.integration';
 $request = Context::getCurrent()->getRequest();
 
 // Обработка сохранения формы
