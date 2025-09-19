@@ -8,6 +8,7 @@ use Bitrix\Main\Context;
 use Bitrix\Main\Type\DateTime;
 use Bitrix\Main\SystemException;
 use Bitrix\Main\Page\Asset;
+use Bitrix\Main\Config\Option;
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 
