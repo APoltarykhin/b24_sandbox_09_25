@@ -23,30 +23,25 @@ $APPLICATION->SetTitle(Loc::getMessage("PT_CUSTOM_ADMIN_STAT_TASKS_TITLE"));
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 ?>
 
-<?php
-// Определяем адрес перехода
-$url = '/bitrix/admin/my_item_integration.php';
+<!-- Начало основного блока -->
 
-// Формируем элемент управления с помощью классов UI Button
-echo '<div style="margin: auto; width: fit-content;">';
-CBitrixComponent::includeComponentClass('bitrix:main.ui.button');
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <a id="settingsButton" href="<?=htmlspecialcharsbx('/bitrix/admin/my_item_integration.php'); ?>" class="btn btn-primary" role="button"><?=Loc::getMessage('SETTINGS_WEBHOOKS'); ?></a>
+</div>
 
-// Создаем компонент Button
-CBitrixUiButton::render([
-    'id' => 'my_settings_button',
-    'type' => CBitrixUiButton::TYPE_PRIMARY,
-    'label' => Loc::getMessage('MY_BUTTON_LABEL'),
-]);
-
-// Скрипт-обработчик для навигации по клику
-?>
+<!-- Обработка клика через JQuery -->
 <script type="text/javascript">
-document.getElementById('my_settings_button').addEventListener('click', function () {
-    top.BX.adminSidePanelHelper.open('<?=$url?>');
+BX.ready(function(){
+    $('#settingsButton').on('click', function(e){
+        e.preventDefault();
+        var link = $(this).attr('href');
+        top.BX.adminSidePanelHelper.open(link); // Открытие страницы в боковой панели админки
+    });
 });
 </script>
 
-<?php echo '</div>'; ?>
+<!-- Основной контент заканчивается тут -->
+
 
 <?php
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
