@@ -23,7 +23,7 @@ Extension::load(['ui.progressbar', 'ui.forms', 'ui.entity-selector', 'ui.buttons
 $request = Context::getCurrent()->getRequest();
 
 $APPLICATION->ShowHead();
-$APPLICATION->SetTitle(Loc::getMessage("PT_CUSTOM_ADMIN_STAT_TASKS_TITLE"));
+$APPLICATION->SetTitle(Loc::getMessage("HOMEART_INTRGRATION_TASKS_TITLE"));
 
 // ПОДКЛЮЧЕНИЕ ПРОЛОГА
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
@@ -46,7 +46,7 @@ if ($request->isPost() && check_bitrix_sessid() && $request->getPost('save')) {
 
 // Валидация URL
     if (!empty($webhookUrl) && !filter_var($webhookUrl, FILTER_VALIDATE_URL)) {
-        $errorMessage = Loc::getMessage("PT_CUSTOM_ADMIN_STAT_INVALID_URL");
+        $errorMessage = Loc::getMessage("HOMEART_INTRGRATION_INVALID_URL");
         \CAdminMessage::ShowMessage([
             'MESSAGE' => $errorMessage,
             'TYPE' => 'ERROR'
@@ -58,7 +58,7 @@ if ($request->isPost() && check_bitrix_sessid() && $request->getPost('save')) {
         Option::set($module_id, "log_enabled", $logEnabled);
 
 // Показать сообщение об успехе
-        \CAdminMessage::ShowNote(Loc::getMessage("PT_CUSTOM_ADMIN_STAT_SETTINGS_SAVED"));
+        \CAdminMessage::ShowNote(Loc::getMessage("HOMEART_INTRGRATION_SETTINGS_SAVED"));
     }
 }
 
@@ -67,7 +67,7 @@ $currentWebhookUrl = Option::get($module_id, "webhook_url", "");
 $currentSecretKey = Option::get($module_id, "secret_key", "");
 $currentLogEnabled = Option::get($module_id, "log_enabled", "N");
 
-$APPLICATION->SetTitle(Loc::getMessage("PT_CUSTOM_ADMIN_STAT_TASKS_TITLE"));
+$APPLICATION->SetTitle(Loc::getMessage("HOMEART_INTRGRATION_TASKS_TITLE"));
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
@@ -75,13 +75,13 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_a
 $aTabs = [
     [
         "DIV" => "edit1",
-        "TAB" => Loc::getMessage("PT_CUSTOM_ADMIN_STAT_WEBHOOK_SETTINGS"),
-        "TITLE" => Loc::getMessage("PT_CUSTOM_ADMIN_STAT_WEBHOOK_SETTINGS_TITLE"),
+        "TAB" => Loc::getMessage("HOMEART_INTRGRATION_WEBHOOK_SETTINGS"),
+        "TITLE" => Loc::getMessage("HOMEART_INTRGRATION_WEBHOOK_SETTINGS_TITLE"),
     ],
     [
         "DIV" => "edit2",
-        "TAB" => Loc::getMessage("PT_CUSTOM_ADMIN_STAT_ADDITIONAL_SETTINGS"),
-        "TITLE" => Loc::getMessage("PT_CUSTOM_ADMIN_STAT_ADDITIONAL_SETTINGS_TITLE"),
+        "TAB" => Loc::getMessage("HOMEART_INTRGRATION_ADDITIONAL_SETTINGS"),
+        "TITLE" => Loc::getMessage("HOMEART_INTRGRATION_ADDITIONAL_SETTINGS_TITLE"),
     ],
 ];
 
@@ -99,7 +99,7 @@ $tabControl->Begin();
     <tr>
         <td width="40%">
             <label for="webhook_url">
-                <?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_WEBHOOK_URL") ?>:
+                <?= Loc::getMessage("HOMEART_INTRGRATION_WEBHOOK_URL") ?>:
             </label>
         </td>
         <td width="60%">
@@ -111,7 +111,7 @@ $tabControl->Begin();
                    class="adm-input"
                    style="width: 300px;">
             <div class="ui-ctl-label-text" style="color: #828b95; font-size: 12px; margin-top: 5px;">
-                <?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_WEBHOOK_URL_HINT") ?>
+                <?= Loc::getMessage("HOMEART_INTRGRATION_WEBHOOK_URL_HINT") ?>
             </div>
         </td>
     </tr>
@@ -119,7 +119,7 @@ $tabControl->Begin();
     <tr>
         <td width="40%">
             <label for="secret_key">
-                <?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_SECRET_KEY") ?>:
+                <?= Loc::getMessage("HOMEART_INTRGRATION_SECRET_KEY") ?>:
             </label>
         </td>
         <td width="60%">
@@ -127,11 +127,11 @@ $tabControl->Begin();
                    name="secret_key"
                    id="secret_key"
                    value="<?= htmlspecialcharsbx($currentSecretKey) ?>"
-                   placeholder="<?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_SECRET_KEY_PLACEHOLDER") ?>"
+                   placeholder="<?= Loc::getMessage("HOMEART_INTRGRATION_SECRET_KEY_PLACEHOLDER") ?>"
                    class="adm-input"
                    style="width: 300px;">
             <div class="ui-ctl-label-text" style="color: #828b95; font-size: 12px; margin-top: 5px;">
-                <?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_SECRET_KEY_HINT") ?>
+                <?= Loc::getMessage("HOMEART_INTRGRATION_SECRET_KEY_HINT") ?>
             </div>
         </td>
     </tr>
@@ -139,7 +139,7 @@ $tabControl->Begin();
     <tr>
         <td width="40%">
             <label for="log_enabled">
-                <?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_LOG_ENABLED") ?>:
+                <?= Loc::getMessage("HOMEART_INTRGRATION_LOG_ENABLED") ?>:
             </label>
         </td>
         <td width="60%">
@@ -158,8 +158,8 @@ $tabControl->Begin();
     <tr>
         <td colspan="2">
             <div style="padding: 20px; text-align: center;">
-                <h3><?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_ADDITIONAL_FEATURES") ?></h3>
-                <p><?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_ADDITIONAL_FEATURES_DESC") ?></p>
+                <h3><?= Loc::getMessage("HOMEART_INTRGRATION_ADDITIONAL_FEATURES") ?></h3>
+                <p><?= Loc::getMessage("HOMEART_INTRGRATION_ADDITIONAL_FEATURES_DESC") ?></p>
             </div>
         </td>
     </tr>
@@ -168,11 +168,11 @@ $tabControl->Begin();
 
     <input type="submit"
            name="save"
-           value="<?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_SAVE_BUTTON") ?>"
+           value="<?= Loc::getMessage("HOMEART_INTRGRATION_SAVE_BUTTON") ?>"
            class="ui-btn ui-btn-success">
 
     <input type="button"
-           value="<?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_CANCEL_BUTTON") ?>"
+           value="<?= Loc::getMessage("HOMEART_INTRGRATION_CANCEL_BUTTON") ?>"
            onclick="window.location.reload()"
            class="ui-btn ui-btn-link">
 
@@ -186,7 +186,7 @@ $tabControl->Begin();
 
         if (webhookUrl && !isValidUrl(webhookUrl)) {
             e.preventDefault();
-            showNotification('<?= Loc::getMessage("PT_CUSTOM_ADMIN_STAT_INVALID_URL") ?>', 'error');
+            showNotification('<?= Loc::getMessage("HOMEART_INTRGRATION_INVALID_URL") ?>', 'error');
             return false;
         }
 
