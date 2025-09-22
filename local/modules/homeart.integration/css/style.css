@@ -7,7 +7,7 @@
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-body {
@@ -17,4 +17,17 @@
 
 .btn {
     margin-top: auto;
+}
+
+/*Стили верстки административного раздела Веб-хуки*/
+.adm-detail-content-cell-l {
+    align-content: baseline;
+}
+
+.ui-btn ui-btn-success {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.ui-btn ui-btn-link {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

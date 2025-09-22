@@ -18,7 +18,7 @@ $action = (new Uri($request->getRequestUri()))->getUri();
     <p><?= Loc::getMessage("MY_INTEGRATION_SAVE") ?></p>
     <p>
         <input type="checkbox" name="savedata" id="savedata" value="Y" checked>
-        <label for="savedata"><?= Loc::getMessage("MY_INTEGRATIONC_NO_DEL") ?></label>
+        <label for="savedata"><?= Loc::getMessage("MY_INTEGRATION_NO_DEL") ?></label>
     </p>
-    <input type="submit" name="inst" value="<?= Loc::getMessage("MY_INTEGRATIONC_NEXT_STEP") ?>">
+    <input type="submit" name="inst" value="<?= Loc::getMessage("MY_INTEGRATION_NEXT_STEP") ?>">
 </form>
