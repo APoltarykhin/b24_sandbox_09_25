@@ -12,33 +12,45 @@ use HomeArt\Integration\Service\WebhookSender;
  */
 class BizprocHandler
 {
-    /**
-     * Обрабатывает события, связанные с бизнес-процессами.
-     *
-     * @param \Bitrix\Main\Event $event Объект события.
-     */
-    public static function onAfterBizprocWorkflowStart(\Bitrix\Main\Event $event): void
-    {
-        // Получаем параметры, переданные вместе с событием
-        $parameters = $event->getParameters();
-        // ID запущенного workflow (экземпляра бизнес-процесса)
-        $workflowId = $parameters[0];
 
-        // Здесь будет логика: получить данные по БП и отправить вебхук
-        // Пока что просто логируем, что событие сработало (KISS - начинаем с простого)
+    /**
+     * Обрабатывает событие создания нового задания (таска) Бизнес-процесса - создание лида.
+     *
+     * @param array $arFields Массив с полями создаваемого задания.
+     * @param array $arParams Дополнительные параметры.
+     */
+    public static function onAfterBizprocTaskAdd(array &$arFields, array &$arParams): void
+    {
+        // Проверяем, что модуль bizproc подключен
+        if (!Loader::includeModule('bizproc')) {
+            return;
+        }
+
+        // Логируем факт срабатывания события
         if (Option::get('homeart.integration', 'log_enabled') == 'Y') {
+            $logMessage = sprintf(
+                "Создано задание БП. ID задания: %s, ID workflow (БП): %s, Активность: %s, Параметры: %s",
+                $arFields['ID'] ?? 'N/A',
+                $arFields['WORKFLOW_ID'] ?? 'N/A',
+                    $arFields['IS_INLINE'] ?? 'N/A' ? 'inline' : 'обычная',
+                print_r($arParams, true)
+            );
+
             Debug::writeToFile(
-                "Запущен Бизнес-процесс с ID: " . $workflowId,
+                $logMessage,
                 "",
-                "/local/modules/homeart.integration/logs/" . date("Y-m-d") . ".log"
+                $_SERVER['DOCUMENT_ROOT'] . "/local/modules/homeart.integration/logs/" . date("Y-m-d") . ".log"
             );
         }
 
         // -- На следующем этапе здесь будет вызов WebhookSender --
-        // $webhookSender = new WebhookSender();
-        // $webhookSender->send('bizproc.start', ['workflow_id' => $workflowId]);
+        // $webhookData = [
+        //    'event_type' => 'bizproc.task.created',
+        //    'task_id' => $arFields['ID'],
+        //    'workflow_id' => $arFields['WORKFLOW_ID'],
+        //    'activity' => $arFields['ACTIVITY'],
+        //    'activity_name' => $arFields['ACTIVITY_NAME']
+        // ];
+        // $webhookSender->send($webhookData);
     }
-
-    // В будущем мы добавим сюда другие обработчики:
-    // onAfterCrmLeadAdd, onAfterBizprocWorkflowComplete и т.д.
 }
