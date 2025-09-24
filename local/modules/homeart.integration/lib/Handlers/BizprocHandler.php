@@ -20,7 +20,7 @@ class BizprocHandler
      * @param array $arFields Массив с полями создаваемого задания.
 //     * @param array $arParams Дополнительные параметры.
      */
-    public static function onAfterBizprocTaskAdd(array $event): void
+    public static function onAfterBizprocTaskAdd($event): void
     {
         // Проверяем, что модуль bizproc подключен
         if (!Loader::includeModule('bizproc')) {
