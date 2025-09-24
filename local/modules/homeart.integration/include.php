@@ -1,7 +1,7 @@
 <?php
 
 use Bitrix\Main\EventManager;
-use HomeArt\Integration\Handlers\BizprocHandler;
+use Homeart\Integration\Handlers\BizprocHandler;
 
 // Регистрируем наши обработчики событий
 $eventManager = EventManager::getInstance();
