@@ -2,6 +2,7 @@
 
 namespace Homeart\Integration\Handlers;
 
+use Bitrix\Main\Loader;
 use Bitrix\Main\Diag\Debug;
 use HomeArt\Integration\Service\WebhookSender;
 
