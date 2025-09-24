@@ -5,12 +5,14 @@ use HomeArt\Integration\Handlers\BizprocHandler;
 
 // Регистрируем наши обработчики событий
 $eventManager = EventManager::getInstance();
+$moduleId = 'homeart.integration';
 
 // Подписываемся на событие "После запуска задания бизнес-процесса"
-$eventManager->addEventHandler(
-    'bizproc', // Модуль, в котором происходит событие
+$eventManager->RegisterEventHandler(
+    'bizproc', // Модуль, в котором происходит нужное событие
     'OnTaskAdd', // Конкретное событие
-    [BizprocHandler::class, 'onAfterBizprocTaskAdd'] // Класс и метод для вызова
+    $moduleId,
+    [BizprocHandler::class, 'onAfterBizprocTaskAdd'] // Класс и метод-обработчик события
 );
 
 // В будущем мы добавим здесь регистрацию для CRM и других событий.
