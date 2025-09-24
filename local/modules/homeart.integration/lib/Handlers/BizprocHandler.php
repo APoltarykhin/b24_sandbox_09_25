@@ -33,20 +33,20 @@ class BizprocHandler
             var_export('Сработало событие', true) . "\n\n",
             FILE_APPEND
         );
-        // Логируем результат
-        file_put_contents(
-            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
-            "=== Логи ===\n" .
-            var_export($arFields, true) . "\n\n",
-            FILE_APPEND
-        );
-        // Логируем результат
-        file_put_contents(
-            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
-            "=== Логи ===\n" .
-            var_export($arParams, true) . "\n\n",
-            FILE_APPEND
-        );
+//        // Логируем результат
+//        file_put_contents(
+//            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
+//            "=== Логи ===\n" .
+//            var_export($arFields, true) . "\n\n",
+//            FILE_APPEND
+//        );
+//        // Логируем результат
+//        file_put_contents(
+//            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
+//            "=== Логи ===\n" .
+//            var_export($arParams, true) . "\n\n",
+//            FILE_APPEND
+//        );
 
 //        // Логируем факт срабатывания события
 //        if (Option::get('homeart.integration', 'log_enabled') == 'Y') {
