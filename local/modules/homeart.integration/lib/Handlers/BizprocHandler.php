@@ -26,22 +26,44 @@ class BizprocHandler
             return;
         }
 
-        // Логируем факт срабатывания события
-        if (Option::get('homeart.integration', 'log_enabled') == 'Y') {
-            $logMessage = sprintf(
-                "Создано задание БП. ID задания: %s, ID workflow (БП): %s, Активность: %s, Параметры: %s",
-                $arFields['ID'] ?? 'N/A',
-                $arFields['WORKFLOW_ID'] ?? 'N/A',
-                    $arFields['IS_INLINE'] ?? 'N/A' ? 'inline' : 'обычная',
-                print_r($arParams, true)
-            );
+        // Логируем результат
+        file_put_contents(
+            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
+            "=== Логи ===\n" .
+            var_export('Сработало событие', true) . "\n\n",
+            FILE_APPEND
+        );
+        // Логируем результат
+        file_put_contents(
+            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
+            "=== Логи ===\n" .
+            var_export($arFields, true) . "\n\n",
+            FILE_APPEND
+        );
+        // Логируем результат
+        file_put_contents(
+            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
+            "=== Логи ===\n" .
+            var_export($arParams, true) . "\n\n",
+            FILE_APPEND
+        );
 
-            Debug::writeToFile(
-                $logMessage,
-                "",
-                $_SERVER['DOCUMENT_ROOT'] . "/local/modules/homeart.integration/logs/" . date("Y-m-d") . ".log"
-            );
-        }
+//        // Логируем факт срабатывания события
+//        if (Option::get('homeart.integration', 'log_enabled') == 'Y') {
+//            $logMessage = sprintf(
+//                "Создано задание БП. ID задания: %s, ID workflow (БП): %s, Активность: %s, Параметры: %s",
+//                $arFields['ID'] ?? 'N/A',
+//                $arFields['WORKFLOW_ID'] ?? 'N/A',
+//                    $arFields['IS_INLINE'] ?? 'N/A' ? 'inline' : 'обычная',
+//                print_r($arParams, true)
+//            );
+//
+//            Debug::writeToFile(
+//                $logMessage,
+//                "",
+//                $_SERVER['DOCUMENT_ROOT'] . "/local/modules/homeart.integration/logs/" . date("Y-m-d") . ".log"
+//            );
+//        }
 
         // -- На следующем этапе здесь будет вызов WebhookSender --
         // $webhookData = [
