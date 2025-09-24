@@ -17,10 +17,10 @@ class BizprocHandler
     /**
      * Обрабатывает событие создания нового задания (таска) Бизнес-процесса - создание лида.
      *
-     * @param array $arFields Массив с полями создаваемого задания.
-     * @param array $arParams Дополнительные параметры.
+//     * @param array $arFields Массив с полями создаваемого задания.
+//     * @param array $arParams Дополнительные параметры.
      */
-    public static function onAfterBizprocTaskAdd(array &$arFields, array &$arParams): void
+    public static function onAfterBizprocTaskAdd(): void
     {
         // Проверяем, что модуль bizproc подключен
         if (!Loader::includeModule('bizproc')) {
