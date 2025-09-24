@@ -27,7 +27,7 @@ class BizprocHandler
             return;
         }
 
-        $arDataEvent = $event->getParameters();
+        $arDataEvent = $event->getParameter('fields');
         // Логируем результат
         file_put_contents(
             $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
