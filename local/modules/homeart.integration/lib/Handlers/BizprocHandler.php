@@ -27,8 +27,8 @@ class BizprocHandler
             return;
         }
 
-        $arDataEvent = $event->getParameters();
-        $data = $arDataEvent[0];
+//        $arDataEvent = $event->getParameters();
+//        $data = $arDataEvent[0];
         // Логируем результат
         file_put_contents(
             $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
@@ -36,13 +36,13 @@ class BizprocHandler
             var_export('Сработало событие', true) . "\n\n",
             FILE_APPEND
         );
-        // Логируем результат
-        file_put_contents(
-            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
-            "=== Логи ===\n" .
-            var_export($data, true) . "\n\n",
-            FILE_APPEND
-        );
+//        // Логируем результат
+//        file_put_contents(
+//            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
+//            "=== Логи ===\n" .
+//            var_export($data, true) . "\n\n",
+//            FILE_APPEND
+//        );
 //        // Логируем результат
 //        file_put_contents(
 //            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
