@@ -20,13 +20,14 @@ class BizprocHandler
      * @param array $arFields Массив с полями создаваемого задания.
 //     * @param array $arParams Дополнительные параметры.
      */
-    public static function onAfterBizprocTaskAdd(array $arFields): void
+    public static function onAfterBizprocTaskAdd(array $event): void
     {
         // Проверяем, что модуль bizproc подключен
         if (!Loader::includeModule('bizproc')) {
             return;
         }
 
+        $arDataEvent = $event->getParameters();
         // Логируем результат
         file_put_contents(
             $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
@@ -38,7 +39,7 @@ class BizprocHandler
         file_put_contents(
             $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
             "=== Логи ===\n" .
-            var_export($arFields, true) . "\n\n",
+            var_export($arDataEvent, true) . "\n\n",
             FILE_APPEND
         );
 //        // Логируем результат
