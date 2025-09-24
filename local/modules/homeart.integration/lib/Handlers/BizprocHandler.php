@@ -17,7 +17,7 @@ class BizprocHandler
     /**
      * Обрабатывает событие создания нового задания (таска) Бизнес-процесса - создание лида.
      *
-     * @param array $arFields Массив с полями создаваемого задания.
+//     * @param array $arFields Массив с полями создаваемого задания.
 //     * @param array $arParams Дополнительные параметры.
      */
     public static function onAfterBizprocTaskAdd($event): void
@@ -27,7 +27,7 @@ class BizprocHandler
             return;
         }
 
-        $arDataEvent = $event->getParameter('primary');
+        $arDataEvent = $event->getParameters();
         // Логируем результат
         file_put_contents(
             $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
