@@ -4,12 +4,12 @@ namespace Homeart\Integration\Handlers;
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\Diag\Debug;
+use Bitrix\Bizproc\Workflow\Task\TaskTable;
 use HomeArt\Integration\Service\WebhookSender;
+
 
 /**
  * Обработчик событий модуля.
- * Класс является статическим, так как его методы должны быть доступны без создания экземпляра,
- * что соответствует требованию API событий Битрикс.
  */
 class BizprocHandler
 {
@@ -17,38 +17,36 @@ class BizprocHandler
     /**
      * Обрабатывает событие создания нового задания (таска) Бизнес-процесса - создание лида.
      *
-//     * @param array $arFields Массив с полями создаваемого задания.
-//     * @param array $arParams Дополнительные параметры.
+     //     * @param array $arFields Массив с полями создаваемого задания.
+     //     * @param array $arParams Дополнительные параметры.
      */
-    public static function onAfterBizprocTaskAdd(array $ID): void
+    public static function onAfterBizprocTaskAdd(): void
     {
         // Проверяем, что модуль bizproc подключен
         if (!Loader::includeModule('bizproc')) {
             return;
         }
 
-//        $arDataEvent = $event->getParameters();
+        // Строим запрос через класс таблицы b_bp_task
+        $query = TaskTable::query()
+            ->setSelect(['*']) // Выбираем все поля
+            ->setOrder(['CREATED_DATE' => 'DESC']) // Сортируем по дате создания
+            ->setLimit(1); // Ограничиваем одну запись
+
+        // Выполняем запрос
+        $result = $query->exec();
+
+        // Получаем последнюю запись
+        $lastTask = $result->fetch();
+
         // Логируем результат
         file_put_contents(
             $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
             "=== Логи ===\n" .
-            var_export('Сработало событие', true) . "\n\n",
+            var_export($lastTask, true) . "\n\n",
             FILE_APPEND
         );
-        // Логируем результат
-        file_put_contents(
-            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
-            "=== Логи ===\n" .
-            var_export($ID, true) . "\n\n",
-            FILE_APPEND
-        );
-//        // Логируем результат
-//        file_put_contents(
-//            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
-//            "=== Логи ===\n" .
-//            var_export($arParams, true) . "\n\n",
-//            FILE_APPEND
-//        );
+
 
 //        // Логируем факт срабатывания события
 //        if (Option::get('homeart.integration', 'log_enabled') == 'Y') {
