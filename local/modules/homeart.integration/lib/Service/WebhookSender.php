@@ -56,6 +56,14 @@ class WebhookSender
         // 3. Отправляем запрос
         $isSuccess = $this->makeHttpRequest($requestBody);
 
+        // Логируем результат
+        file_put_contents(
+            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
+            "=== Логи хука ===\n" .
+            var_export($isSuccess, true) . "\n\n",
+            FILE_APPEND
+        );
+
         // 4. Логируем результат
         $this->logResult($isSuccess);
 
