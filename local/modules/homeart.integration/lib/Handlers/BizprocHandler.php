@@ -39,40 +39,36 @@ class BizprocHandler
         // Получаем последнюю запись
         $lastTask = $result->fetch();
 
-        // Логируем результат
-        file_put_contents(
-            $_SERVER['DOCUMENT_ROOT'] . '/log_test_ARTART.txt',
-            "=== Логи ===\n" .
-            var_export($lastTask, true) . "\n\n",
-            FILE_APPEND
-        );
+        if (!$lastTask) {
+            // Если задание почему-то не найдено, выходим
+            return;
+        }
 
+        // 2. Подготавливаем полезную нагрузку (Payload)
+        // Мы не отправляем ВСЕ поля, а только самые важные (KISS, безопасность)
+        $webhookPayload = [
+            'task_id' => (int) $lastTask['ID'],
+            'workflow_id' => $lastTask['WORKFLOW_ID'],
+            'activity_name' => $lastTask['ACTIVITY_NAME'],
+            'task_created_date' => $lastTask['CREATED_DATE'],
+            'task_status' => $lastTask['STATUS'],
+        ];
 
-//        // Логируем факт срабатывания события
-//        if (Option::get('homeart.integration', 'log_enabled') == 'Y') {
-//            $logMessage = sprintf(
-//                "Создано задание БП. ID задания: %s, ID workflow (БП): %s, Активность: %s, Параметры: %s",
-//                $arFields['ID'] ?? 'N/A',
-//                $arFields['WORKFLOW_ID'] ?? 'N/A',
-//                    $arFields['IS_INLINE'] ?? 'N/A' ? 'inline' : 'обычная',
-//                print_r($arParams, true)
-//            );
-//
-//            Debug::writeToFile(
-//                $logMessage,
-//                "",
-//                $_SERVER['DOCUMENT_ROOT'] . "/local/modules/homeart.integration/logs/" . date("Y-m-d") . ".log"
-//            );
-//        }
+        // 3. Пытаемся отправить вебхук
+        try {
+            $webhookSender = new WebhookSender(); // Настройки подтянутся из модуля автоматически
+            $isSent = $webhookSender->send('bizproc.task.created', $webhookPayload);
 
-        // -- На следующем этапе здесь будет вызов WebhookSender --
-        // $webhookData = [
-        //    'event_type' => 'bizproc.task.created',
-        //    'task_id' => $arFields['ID'],
-        //    'workflow_id' => $arFields['WORKFLOW_ID'],
-        //    'activity' => $arFields['ACTIVITY'],
-        //    'activity_name' => $arFields['ACTIVITY_NAME']
-        // ];
-        // $webhookSender->send($webhookData);
+            // Можно залогировать результат, если нужно
+            // if (!$isSent) { ... }
+
+        } catch (\InvalidArgumentException $e) {
+            // Ошибка конфигурации (например, не указан URL вебхука)
+            // В продакшене можно залогировать ошибку, но не прерывать выполнение скрипта
+            // file_put_contents(...$e->getMessage()...);
+        } catch (\Exception $e) {
+            // Любая другая ошибка
+            // file_put_contents(...$e->getMessage()...);
+        }
     }
 }
