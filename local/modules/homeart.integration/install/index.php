@@ -8,6 +8,8 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Application;
 use Bitrix\Main\Loader;
 use Bitrix\Main\EventManager;
+use Bitrix\Main\IO\Directory;
+use Bitrix\Main\IO\File;
 use Homeart\Integration\Table\IntegrationModuleMainTable;
 
 Loc::loadMessages(__FILE__);
@@ -72,9 +74,9 @@ class homeart_integration extends CModule
         $connection = Application::getConnection();
         if ($this->isVersionD7()) {
             ModuleManager::registerModule($this->MODULE_ID);
-            $this->InstallDB();
-            $this->InstallComponents();
-            $this->InstallFiles();
+            $this->InstallDB(); // установка таблиц
+            $this->InstallDirComponent(); // установка компонента
+            $this->InstallFiles(); // установка алмин файлов
         } else {
             $connection->ThrowException(Loc::getMessage($this->MODULE_ID . "_INSTALL_ERROR_WRONG_VERSION"));
         }
@@ -101,7 +103,7 @@ class homeart_integration extends CModule
             if ($request->get("savedata") !== "Y") {
                 $this->UnInstallDB();
             }
-            $this->UnInstallComponents();
+            $this->UnInstallDirComponent();
             $this->UnInstallFiles();
             ModuleManager::unRegisterModule($this->MODULE_ID);
         }
@@ -178,120 +180,51 @@ class homeart_integration extends CModule
         return true;
     }
 
-    /**
-     * Копирует компоненты модуля
-     * @return bool
-     * @throws \Bitrix\Main\SystemException
-     */
-    public function InstallComponents()
+    public function InstallDirComponent()
     {
-        $documentRoot = Application::getDocumentRoot();
+        $moduleDir = $_SERVER['DOCUMENT_ROOT'] . '/local/modules/homeart.integration';
+        $componentsSource = $moduleDir . '/install/components';
+        $componentsTarget = $_SERVER['DOCUMENT_ROOT'] . '/local/components';
 
-        // Путь к компонентам в модуле
-        $moduleComponentsPath = __DIR__ . '/components';
-
-        // Проверяем существование папки с компонентами
-        if (!\Bitrix\Main\IO\Directory::isDirectoryExists($moduleComponentsPath)) {
-            // Если папки нет - это не ошибка, просто нет компонентов для установки
-            return true;
-        }
-
-        try {
-            // Используем стандартный метод Bitrix для установки компонентов
-            $this->installModuleComponents($moduleComponentsPath);
-            return true;
-        } catch (Exception $e) {
-            $this->__InstallComponentsRollback();
-            throw new \Bitrix\Main\SystemException(
-                'Component installation failed: ' . $e->getMessage()
-            );
-        }
-    }
-
-    /**
-     * Удаляет компоненты модуля
-     * @return bool
-     */
-    public function UnInstallComponents()
-    {
-        $documentRoot = Application::getDocumentRoot();
-        $componentsToRemove = [
-            '/local/components/homeart/homeart.component'
-        ];
-
-        foreach ($componentsToRemove as $componentPath) {
-            $fullPath = $documentRoot . $componentPath;
-            if (\Bitrix\Main\IO\Directory::isDirectoryExists($fullPath)) {
-                \Bitrix\Main\IO\Directory::delete($fullPath);
-            }
-        }
-
-        // Удаляем пустую папку пространства имен если она пуста
-        $namespacePath = $documentRoot . '/local/components/homeart';
-        if (\Bitrix\Main\IO\Directory::isDirectoryExists($namespacePath)) {
-            $dir = new \Bitrix\Main\IO\Directory($namespacePath);
-            if (count($dir->getChildren()) === 0) {
-                \Bitrix\Main\IO\Directory::delete($namespacePath);
-            }
+        if (Directory::isDirectoryExists($componentsSource)) {
+            $this->copyComponents($componentsSource, $componentsTarget);
         }
 
         return true;
     }
 
-    /**
-     * Установка компонентов модуля
-     * @param string $sourcePath Путь к компонентам в модуле
-     */
-    private function installModuleComponents($sourcePath)
+    public function UnInstallDirComponent()
     {
-        $documentRoot = Application::getDocumentRoot();
-        $targetPath = $documentRoot . '/local/components';
+        $componentsTarget = $_SERVER['DOCUMENT_ROOT'] . '/local/components/homeart';
 
-        // Создаем целевую директорию если не существует
-        if (!\Bitrix\Main\IO\Directory::isDirectoryExists($targetPath)) {
-            \Bitrix\Main\IO\Directory::createDirectory($targetPath);
+        if (Directory::isDirectoryExists($componentsTarget)) {
+            Directory::deleteDirectory($componentsTarget);
         }
 
-        // Рекурсивно копируем все компоненты
-        $dir = new \Bitrix\Main\IO\Directory($sourcePath);
-        $children = $dir->getChildren();
-
-        foreach ($children as $child) {
-            if ($child->isDirectory()) {
-                $componentNamespace = $child->getName(); // homeart
-                $namespacePath = $targetPath . '/' . $componentNamespace;
-
-                // Создаем папку пространства имен если не существует
-                if (!\Bitrix\Main\IO\Directory::isDirectoryExists($namespacePath)) {
-                    \Bitrix\Main\IO\Directory::createDirectory($namespacePath);
-                }
-
-                // Копируем компоненты этого пространства имен
-                $componentDirs = $child->getChildren();
-                foreach ($componentDirs as $componentDir) {
-                    if ($componentDir->isDirectory()) {
-                        $componentName = $componentDir->getName(); // homeart.component
-                        $targetComponentPath = $namespacePath . '/' . $componentName;
-
-                        // Копируем компонент
-                        CopyDirFiles(
-                            $componentDir->getPath(),
-                            $targetComponentPath,
-                            true,
-                            true,
-                            false // не останавливаться на ошибках
-                        );
-                    }
-                }
-            }
-        }
+        return true;
     }
 
-    /**
-     * Откат установки компонентов при ошибке
-     */
-    private function __InstallComponentsRollback()
+    private function copyComponents($source, $target)
     {
-        $this->UnInstallComponents();
+        $dir = new \DirectoryIterator($source);
+
+        foreach ($dir as $item) {
+            if ($item->isDot()) {
+                continue;
+            }
+
+            $sourcePath = $item->getPathname();
+            $relativePath = str_replace($source . '/', '', $sourcePath);
+            $targetPath = $target . '/' . $relativePath;
+
+            if ($item->isDir()) {
+                if (!Directory::isDirectoryExists($targetPath)) {
+                    Directory::createDirectory($targetPath);
+                }
+                $this->copyComponents($sourcePath, $target);
+            } else {
+                File::putFileContents($targetPath, File::getFileContents($sourcePath));
+            }
+        }
     }
 }
